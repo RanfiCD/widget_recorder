@@ -4,5 +4,5 @@ description: Demonstrates how to use the widget_recorder plugin.
 dependencies:
   flutter:
     sdk: flutter
-  widget_recorder: ^0.0.1
+  widget_recorder: ^0.1.0
   simple_animations: ^1.3.4

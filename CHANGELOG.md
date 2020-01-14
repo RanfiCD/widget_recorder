@@ -1,3 +1,7 @@
+## [0.1.0]
+
+* **Breaking change**: use controllers to get the image snapshot.
+
 ## [0.0.1+1]
 
 * Add example.

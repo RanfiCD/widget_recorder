@@ -4,44 +4,29 @@ import 'dart:ui' as ui;
 
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'package:widget_recorder/src/widget_recorder_controller.dart';
 import 'package:widget_recorder/src/widget_recorder_snapshot.dart';
 
 export 'package:widget_recorder/src/widget_recorder_snapshot.dart';
+export 'package:widget_recorder/src/widget_recorder_controller.dart';
+export 'package:widget_recorder/src/widget_recorder_simple_controller.dart';
+export 'package:widget_recorder/src/widget_recorder_periodic_controller.dart';
 
 /// A [Widget] that generates an image from a Widget following the provided schedule.
 class WidgetRecorder extends StatefulWidget {
   /// The [Widget] from where to get image. 
   final Widget child;
 
-  /// If this is true, the recording will stop.
-  final bool pause;
-
-  /// Increase or decrease this value to modify
-  /// the generated image quality.
-  final double pixelRatio;
-
-  /// Increase or decrease this value to modify
-  /// the scale of the generated image. 
-  final double scaleFactor;
-
-  /// Choose the [ImageByteFormat] of the generated image.
-  final ui.ImageByteFormat byteFormat;
-
-  /// How much time will pass between snapshots.
-  final Duration delay;
-
-  /// Callback from where to get the generated image.
-  final Function(WidgetRecorderSnapshot) onSnapshotReady;
+  /// The [WidgetRecorderController] from where to get the snapshots.
+  final WidgetRecorderController controller;
 
   WidgetRecorder({
+    Key key,
     @required this.child,
-    this.pause = false,
-    this.pixelRatio = 1.0,
-    this.scaleFactor = 1.0,
-    this.byteFormat = ui.ImageByteFormat.png,
-    this.delay = const Duration(),
-    @required this.onSnapshotReady
-  }): assert(child != null), assert(onSnapshotReady != null);
+    @required this.controller
+  }): assert(child != null),
+      assert(controller != null),
+      super(key: key);
 
   @override
   State<StatefulWidget> createState() => _WidgetRecorderState();
@@ -51,77 +36,55 @@ class _WidgetRecorderState extends State<WidgetRecorder> {
   _WidgetRecorderState();
 
   final GlobalKey _globalKey = GlobalKey();
-  
-  Duration _lastDelay;
-  StreamSubscription<WidgetRecorderSnapshot> _snapshotSub;
+
   RenderObject _renderObject;
 
   @override
   void initState() {
     super.initState();
-
-    _lastDelay = widget.delay;
+    //
+    widget.controller.setCallback(_getSnapshot);
   }
 
   @override
-  Widget build(BuildContext context) {
-    WidgetsBinding.instance.addPostFrameCallback(afterBuild);
-
-    return RepaintBoundary(
-      key: _globalKey,
-      child: widget.child,
-    );
+  void didUpdateWidget(WidgetRecorder oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    //
+    oldWidget.controller.dispose();
+    widget.controller.setCallback(_getSnapshot);
   }
 
-  void afterBuild(_) {
-    // If it's pause or the delay time changes, cancel the previous snapshot.
-    if (_snapshotSub != null && (_lastDelay != widget.delay || widget.pause)) {
-      _snapshotSub.cancel();
-      _snapshotSub = null;
-    }
-    // If it's not pause and there is no pending snapshot, request a new one.
-    if (!widget.pause && _snapshotSub == null) {
-      _snapshotSub = _getSnapshot().asStream().listen((WidgetRecorderSnapshot snapshot) {
-        if (snapshot != null) {
-          widget.onSnapshotReady(snapshot);
-        }
-        
-        _snapshotSub = null;
-        if (this.mounted) {
-          setState(() {
-            //
-          });
-        }
-      });
-    }
+  @override
+  void dispose() {
+    widget.controller.dispose();
+    //
+    super.dispose();
   }
 
   Future<WidgetRecorderSnapshot> _getSnapshot() async {
-    await Future.delayed(widget.delay);
-
     RenderRepaintBoundary repaintBoundary = _getRepaintBoundary();
     WidgetRecorderSnapshot snapshot;
 
-    if (!repaintBoundary.debugNeedsPaint) {
+    if (this.mounted && !repaintBoundary.debugNeedsPaint) {
       Size widgetSize = repaintBoundary.size;
-      ui.Image image = await repaintBoundary.toImage(pixelRatio: widget.pixelRatio);
-      ByteData byteData = await image.toByteData(format: widget.byteFormat);
+      ui.Image image = await repaintBoundary.toImage(pixelRatio: widget.controller.pixelRatio);
+      ByteData byteData = await image.toByteData(format: widget.controller.byteFormat);
 
-      if (widget.scaleFactor != 1.0) {
+      if (widget.controller.scaleFactor != 1.0) {
         final ui.Codec markerImageCodec = await ui.instantiateImageCodec(
           byteData.buffer.asUint8List(),
-          targetWidth: (widgetSize.width * widget.scaleFactor).toInt(),
-          targetHeight: (widgetSize.height * widget.scaleFactor).toInt()
+          targetWidth: (widgetSize.width * widget.controller.scaleFactor).toInt(),
+          targetHeight: (widgetSize.height * widget.controller.scaleFactor).toInt()
         );
         final ui.FrameInfo frameInfo = await markerImageCodec.getNextFrame();
-        byteData = await frameInfo.image.toByteData(format: widget.byteFormat);
+        byteData = await frameInfo.image.toByteData(format: widget.controller.byteFormat);
       }
       
       snapshot = WidgetRecorderSnapshot(
         widgetSize: widgetSize,
-        pixelRatio: widget.pixelRatio,
-        scaleFactor: widget.scaleFactor,
-        byteFormat: widget.byteFormat,
+        pixelRatio: widget.controller.pixelRatio,
+        scaleFactor: widget.controller.scaleFactor,
+        byteFormat: widget.controller.byteFormat,
         byteData: byteData
       );
     }
@@ -135,6 +98,14 @@ class _WidgetRecorderState extends State<WidgetRecorder> {
     }
 
     return _renderObject;
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return RepaintBoundary(
+      key: _globalKey,
+      child: widget.child,
+    );
   }
 }
 
