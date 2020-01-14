@@ -1,6 +1,6 @@
 # Widget Recorder for Flutter
 
-[![pub package](https://img.shields.io/badge/pub-v0.1.0-orange.svg)](https://pub.dartlang.org/packages/widget_recorder)
+[![pub package](https://img.shields.io/badge/pub-v0.1.0+1-orange.svg)](https://pub.dartlang.org/packages/widget_recorder)
 
 A [Flutter](https://flutter.dev/) package to create images from a Widget.
 
@@ -29,8 +29,11 @@ WidgetRecorder(
 ...
 ```
 * **Examples**:
-- Individual screenshots:
+  
+Individual screenshots:
+  
 ![screenshots_example](https://user-images.githubusercontent.com/14138939/72353114-c5aac280-36e3-11ea-947d-fea89fd044e9.gif)
 
-- Recording:
+Recording:
+
 ![recording_example](https://user-images.githubusercontent.com/14138939/72353128-c9d6e000-36e3-11ea-9734-8368f7d00f6f.gif)

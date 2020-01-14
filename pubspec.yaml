@@ -1,6 +1,6 @@
 name: widget_recorder
 description: Generates images from a Widget.
-version: 0.1.0
+version: 0.1.0+1
 homepage: https://github.com/RanfiCD/widget_recorder
 
 environment:
