@@ -1,3 +1,8 @@
+## [0.2.0]
+
+* **Breaking change**: remove Stream from `WidgetRecorderPeriodicController`.
+* Add `onSnapshotTaken` callback directly in the `WidgetRecorder` params.
+
 ## [0.1.0+1]
 
 * Update README.

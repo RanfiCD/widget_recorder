@@ -1,8 +1,8 @@
 name: widget_recorder_example
-description: Demonstrates how to use the widget_recorder plugin.
+description: Demonstrates how to use the widget_recorder package.
 
 dependencies:
   flutter:
     sdk: flutter
-  widget_recorder: ^0.1.0
+  widget_recorder: ^0.2.0
   simple_animations: ^1.3.4

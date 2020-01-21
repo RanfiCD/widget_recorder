@@ -1,6 +1,6 @@
 # Widget Recorder for Flutter
 
-[![pub package](https://img.shields.io/badge/pub-v0.1.0+1-orange.svg)](https://pub.dartlang.org/packages/widget_recorder)
+[![pub package](https://img.shields.io/badge/pub-v0.2.0-orange.svg)](https://pub.dartlang.org/packages/widget_recorder)
 
 A [Flutter](https://flutter.dev/) package to create images from a Widget.
 
@@ -15,16 +15,15 @@ import 'package:widget_recorder/widget_recorder.dart';
 ...
 WidgetRecorder(
     child: myWidget,
-    controller: WidgetRecorderPeriodicController(
-        onSnapshotReady: (WidgetRecorderSnapshot snapshot) {
-            Uint8List bytes = snapshot.byteData.buffer.asUint8List();
-            Image image = Image.memory(bytes);
+    controller: WidgetRecorderPeriodicController(),
+    onSnapshotTaken: (WidgetRecorderSnapshot snapshot) {
+        Uint8List bytes = snapshot.byteData.buffer.asUint8List();
+        Image image = Image.memory(bytes);
 
-            setState((){
-                _myImage = image;
-            });
-        }
-    )
+        setState((){
+            _myImage = image;
+        });
+    }
 ),
 ...
 ```

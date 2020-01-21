@@ -20,10 +20,13 @@ class WidgetRecorder extends StatefulWidget {
   /// The [WidgetRecorderController] from where to get the snapshots.
   final WidgetRecorderController controller;
 
+  final Function(WidgetRecorderSnapshot) onSnapshotTaken;
+
   WidgetRecorder({
     Key key,
     @required this.child,
-    @required this.controller
+    @required this.controller,
+    this.onSnapshotTaken
   }): assert(child != null),
       assert(controller != null),
       super(key: key);
@@ -88,6 +91,8 @@ class _WidgetRecorderState extends State<WidgetRecorder> {
         byteData: byteData
       );
     }
+
+    widget.onSnapshotTaken?.call(snapshot);
     
     return snapshot;
   }

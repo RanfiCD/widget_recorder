@@ -9,7 +9,6 @@ class WidgetRecorderPeriodicController extends WidgetRecorderController {
   final Function(WidgetRecorderSnapshot) onSnapshotReady;
   
   Timer _timer;
-  StreamController<WidgetRecorderSnapshot> _streamController;
 
   WidgetRecorderPeriodicController({
     double pixelRatio = 1.0,
@@ -31,14 +30,11 @@ class WidgetRecorderPeriodicController extends WidgetRecorderController {
   @override
   void setCallback(SnapshotCallback callback) {
     super.setCallback(callback);
-    //
-    _streamController = StreamController<WidgetRecorderSnapshot>();
   }
 
   @override
   void dispose() {
     _timer?.cancel();
-    _streamController?.close();
     //
     super.dispose();
   }
@@ -63,14 +59,8 @@ class WidgetRecorderPeriodicController extends WidgetRecorderController {
       snapshot = await this.getSnapshot();
     }
 
-    if (snapshot != null) {
-      _streamController?.add(snapshot);
-
-      if (this.onSnapshotReady != null) {
-        onSnapshotReady(snapshot);
-      }
+    if (snapshot != null && this.onSnapshotReady != null) {
+      onSnapshotReady(snapshot);
     }
   }
-
-  Stream<WidgetRecorderSnapshot> getStream() => _streamController?.stream;
 }

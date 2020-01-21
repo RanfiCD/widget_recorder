@@ -82,15 +82,15 @@ class _TestRouteState extends State<TestRoute> {
                       ? _simpleController
                       : WidgetRecorderPeriodicController(
                           startRecording: !_pauseRecording,
-                          delay: Duration(seconds: _sliderValue.toInt()),
-                          onSnapshotReady: (WidgetRecorderSnapshot snapshot) {
-                            Uint8List bytes = snapshot.byteData.buffer.asUint8List();
-
-                            setState(() {
-                              _imageBytes = bytes;
-                            });
-                          }
+                          delay: Duration(seconds: _sliderValue.toInt())
                         ),
+                    onSnapshotTaken: (WidgetRecorderSnapshot snapshot) {
+                      Uint8List bytes = snapshot.byteData.buffer.asUint8List();
+
+                      setState(() {
+                        _imageBytes = bytes;
+                      });
+                    },
                   ),
                 ),
               ),
@@ -98,10 +98,13 @@ class _TestRouteState extends State<TestRoute> {
               Flexible(
                 flex: 8,
                 child: FittedBox(
-                  fit: BoxFit.contain,
-                  child: _imageBytes == null
-                    ? _defaultImage
-                    : Image.memory(_imageBytes, gaplessPlayback: true),
+                  child: SizedBox(
+                    width: box_size.width,
+                    height: box_size.height,
+                    child: _imageBytes == null
+                      ? _defaultImage
+                      : Image.memory(_imageBytes, gaplessPlayback: true),
+                  ),
                 ),
               ),
               Spacer(flex: 1),
@@ -126,15 +129,7 @@ class _TestRouteState extends State<TestRoute> {
                 flex: 1,
                 child: _selections.elementAt(0)
                   ? RaisedButton(
-                      onPressed: () async {
-                        WidgetRecorderSnapshot snapshot = await _simpleController.takeSnapshot();
-
-                        if (snapshot != null) {
-                          setState(() {
-                            _imageBytes = snapshot.byteData.buffer.asUint8List();
-                          });
-                        }
-                      },
+                      onPressed: _simpleController.takeSnapshot,
                       child: Icon(Icons.camera_enhance),
                     )
                   : RaisedButton(
