@@ -7,12 +7,11 @@ class WidgetRecorderSnapshot {
   final double scaleFactor;
   final ImageByteFormat byteFormat;
   final ByteData byteData;
-  
-  WidgetRecorderSnapshot({
-    this.widgetSize,
-    this.pixelRatio,
-    this.scaleFactor,
-    this.byteFormat,
-    this.byteData
-  });
+
+  WidgetRecorderSnapshot(
+      {this.widgetSize,
+      this.pixelRatio,
+      this.scaleFactor,
+      this.byteFormat,
+      this.byteData});
 }

@@ -81,7 +81,7 @@ class _TestRouteState extends State<TestRoute> {
                     controller: _currentSelection == 0
                       ? _simpleController
                       : WidgetRecorderPeriodicController(
-                          startRecording: !_pauseRecording,
+                          pause: _pauseRecording,
                           delay: Duration(seconds: _sliderValue.toInt())
                         ),
                     onSnapshotTaken: (WidgetRecorderSnapshot snapshot) {

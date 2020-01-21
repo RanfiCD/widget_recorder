@@ -13,11 +13,10 @@ abstract class WidgetRecorderController {
   @protected
   SnapshotCallback getSnapshot;
 
-  WidgetRecorderController({
-    this.pixelRatio = 1.0,
-    this.scaleFactor = 1.0,
-    this.byteFormat = ImageByteFormat.png
-  });
+  WidgetRecorderController(
+      {this.pixelRatio = 1.0,
+      this.scaleFactor = 1.0,
+      this.byteFormat = ImageByteFormat.png});
 
   @mustCallSuper
   void setCallback(SnapshotCallback callback) => this.getSnapshot = callback;

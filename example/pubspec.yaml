@@ -1,8 +1,18 @@
 name: widget_recorder_example
 description: Demonstrates how to use the widget_recorder package.
 
+environment:
+  sdk: ">=2.2.2 <3.0.0"
+
 dependencies:
   flutter:
     sdk: flutter
-  widget_recorder: ^0.2.0
+  widget_recorder: ^0.3.0
   simple_animations: ^1.3.4
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+
+flutter:
+  uses-material-design: true

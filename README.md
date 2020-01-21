@@ -1,6 +1,6 @@
 # Widget Recorder for Flutter
 
-[![pub package](https://img.shields.io/badge/pub-v0.2.0-orange.svg)](https://pub.dartlang.org/packages/widget_recorder)
+[![pub package](https://img.shields.io/badge/pub-v0.3.0-orange.svg)](https://pub.dartlang.org/packages/widget_recorder)
 
 A [Flutter](https://flutter.dev/) package to create images from a Widget.
 

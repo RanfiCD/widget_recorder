@@ -1,6 +1,6 @@
 name: widget_recorder
-description: Generates images from a Widget.
-version: 0.2.0
+description: Take images from any rendered `Widget` in the tree. Choose how to take the pictures using various controllers.
+version: 0.3.0
 homepage: https://github.com/RanfiCD/widget_recorder
 
 environment:

@@ -1,3 +1,9 @@
+## [0.3.0]
+
+* **Breaking change**: modify `WidgetRecorderPeriodicController` API.
+* Format code.
+* Update package description.
+
 ## [0.2.0]
 
 * **Breaking change**: remove Stream from `WidgetRecorderPeriodicController`.
